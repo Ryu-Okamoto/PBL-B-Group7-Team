@@ -3,3 +3,4 @@ Java sources for Robocode
 
 ## members:
 - Ryu O. Hello World!;
+yusuke takato
