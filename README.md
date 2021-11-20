@@ -2,7 +2,13 @@
 Java sources for Robocode
 
 ## members:
-- Ryu O. Hello World!;
+- Ryu O. printf(Hello World!);
 - Tamaki046 Hello World! Thank you for preparing GitHub! Nice to Meet You!
 - inuiyuto Hello World! arigato
 - hello!
+
+## coding procedure
+1. **pull**(*certainly*)
+2. edit code
+3. commit
+4. push
