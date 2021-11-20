@@ -4,6 +4,6 @@ Java sources for Robocode
 
 ## members:
 - Ryu O. Hello World!;
-- Tamaki046 Hello World! Thank you for preparing GitHub!@Nice to Meet You!
+- Tamaki046 Hello World! Thank you for preparing GitHub! Nice to Meet You!
 - inuiyuto Hello World! arigato
 >>>>>>> branch 'main' of https://github.com/Ryu-Okamoto/PBL-B-Group7-Team.git
