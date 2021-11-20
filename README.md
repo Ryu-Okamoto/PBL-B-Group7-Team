@@ -4,3 +4,4 @@ Java sources for Robocode
 ## members:
 - Ryu O. Hello World!;
 - Tamaki046 Hello World! Thank you for preparing GitHub!
+- inuiyuto Hello World! arigato
