@@ -2,4 +2,4 @@
 Java sources for Robocode
 
 ## members:
-- Ryu O.
+- Ryu O. Hello
