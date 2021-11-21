@@ -12,3 +12,6 @@ Java sources for Robocode
 2. edit code
 3. commit
 4. push
+
+## priority
+1. ‚Æ‚è‚ ‚¦‚¸“®‚­‚â‚Â‚ğ‚Â‚­‚éB
