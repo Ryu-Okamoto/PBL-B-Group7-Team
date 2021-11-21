@@ -24,6 +24,7 @@ public class Move {
 			double centerAngle = calculateDegree();
 			mRobot.setTurnLeft(centerAngle);
 			mRobot.setAhead(2.0);
+			mRobot.execute();
 		}while(Math.abs(calculateDistance() - mRadius) > 10.0);
 	}
 
@@ -32,6 +33,7 @@ public class Move {
 		mRobot.setTurnRightRadians(Math.cos(
 				calculateDegree() - (calculateDistance() - mRadius)));
 		mRobot.setAhead(2.0);
+		mRobot.execute();
 	}
 	
 	// Œ»İ’l‚Æ‰~‚Ì’†S‚Ì‹——£‚ğŒvZ
