@@ -1,16 +1,26 @@
 package g7team;
 
 import robocode.*;
+
+import java.awt.Color;
+
 //import gun.Gun;
 import move.Move;
 
-public class G7SubRobot2 extends AdvancedRobot{
+public class G7SubRobot2 extends TeamRobot{
 	//private Gun  mGun;
+	//private double MyX,BuddyX;
+	private int mode;
 	private Move mMove;
 	
 	public void run() {	
+		//íÖêF
+		Color springgreen  = new Color(0,255,127);
+		setColors(springgreen, springgreen, springgreen, springgreen, springgreen);
+		
 		//âEîºï™óp
-		mMove = new Move(this, 400.0, 400.0, 300.0, 1);
+		mode = 1;
+		mMove = new Move(this, 400.0, 400.0, 300.0, mode);
 		
 		//ãOìπÇ…èÊÇÈ
 		mMove.getOnTrack();
@@ -22,6 +32,10 @@ public class G7SubRobot2 extends AdvancedRobot{
 	}
 	
 	public void onScannedRobot(ScannedRobotEvent e) {
-		fire(1);
+		if (isTeammate(e.getName())) {
+			return;
+		}else {
+			fire(1);
+		}
 	}
 }

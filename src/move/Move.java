@@ -13,7 +13,7 @@ public class Move{
 	private double mRadius;
 	
 	// 制御先のロボット
-	private AdvancedRobot mRobot;
+	private TeamRobot mRobot;
 	
 	//移動モード(0:左半分、1:右半分、2:中央)
 	private int mmode;
@@ -21,7 +21,7 @@ public class Move{
 	//回転方向(1:時計回り、-1:反時計回り)
 	private double clkwise;
 	
-	public Move(AdvancedRobot robot, double XCenter, double YCenter, double radius, int mode){
+	public Move(TeamRobot robot, double XCenter, double YCenter, double radius, int mode){
 		mRobot  = robot;
 		mCenterX = XCenter;
 		mCenterY = YCenter;
@@ -30,6 +30,9 @@ public class Move{
 	}
 	
 	public void getOnTrack() {
+		//初期位置
+		firstMove();
+		
 		//最初に回る方向を決める(時計回りor反時計回り)
 		if((mRobot.getX()-mCenterX)*(mRobot.getY()-mCenterY)>=0) {
 			//ステージ右上or左下にスポーンしたら時計回り
@@ -38,51 +41,73 @@ public class Move{
 			//ステージ左上or右下にスポーンしたら反時計回り
 			clkwise = -1;
 		}
-		
+		//色は黄緑系で
 		switch(mmode) {
-		case 0:
-			//色を青色に変更
-			mRobot.setColors(Color.blue, Color.blue, Color.blue, Color.blue, Color.blue);
-			//左半分の軌道に乗る
-			leftOnTrack();
-			//半円軌道を描く
-			leftRound();
-			break;
-		case 1:
-			//色を赤色に変更
-			mRobot.setColors(Color.red, Color.red, Color.red, Color.red, Color.red);
-			//右半分の軌道に乗る
-			rightOnTrack();
-			//半円軌道を描く
-			rightRound();
-			break;
-		case 2:
-			//色を緑色に変更
-			mRobot.setColors(Color.green, Color.green, Color.green, Color.green, Color.green);
-			//中央の軌道に乗る
-			centerOnTrack();
-			//円軌道を描く
-			centerRound();
-			break;
+			case 0:
+				//左半分の軌道に乗る
+				leftOnTrack();
+				//半円軌道を描く
+				leftRound();
+				break;
+			case 1:
+				//右半分の軌道に乗る
+				rightOnTrack();
+				//半円軌道を描く
+				rightRound();
+				break;
+			case 2:
+				//中央の軌道に乗る
+				centerOnTrack();
+				//円軌道を描く
+				centerRound();
+				break;
 		}
 	}
 	
-	public void dicideClockWise() {
+	//初期位置の移動の処理
+	public void firstMove() {
 		switch(mmode) {
 			case 0:
+				//左半分用の機体が右半分でスタートしていた場合、左半分まで移動する
+				if(mRobot.getX()>=mCenterX) {
+					mRobot.turnLeft(convertDegree(90.0 + mRobot.getHeading()));
+					while(mRobot.getX()>=mCenterX) {
+						mRobot.ahead(100.0);
+					}
+				}
 				break;
 			case 1:
-				if((mRobot.getX()-mCenterX)*(mRobot.getY()-mCenterY)>=0) {
-					clkwise = 1;
-				}else {
-					clkwise = -1;
+				//右半分用の機体が左半分でスタートしていた場合、右半分まで移動する
+				if(mRobot.getX()<=mCenterX) {
+					mRobot.turnRight(convertDegree(90.0 - mRobot.getHeading()));
+					while(mRobot.getX()<=mCenterX) {
+						mRobot.ahead(100.0);
+					}
 				}
 				break;
 			default:
-				clkwise = 1;
+				break;
+			}
+	}
+	
+	/*
+	public void paintColor() {
+		switch(mmode) {
+			case 0:
+				//色を青色に変更
+				mRobot.setColors(Color.blue, Color.blue, Color.blue, Color.blue, Color.blue);
+				break;
+			case 1:
+				//色を赤色に変更
+				mRobot.setColors(Color.red, Color.red, Color.red, Color.red, Color.red);
+				break;
+			case 2:
+				//色を緑色に変更
+				mRobot.setColors(Color.green, Color.green, Color.green, Color.green, Color.green);
 				break;
 		}
 	}
+	*/
 	
 	//中心の方向の角度を計算(左半分用)
 	public double leftToCenterDegree() {
@@ -169,6 +194,9 @@ public class Move{
 	//左半分機体が軌道に乗るまでの動き
 	public void leftOnTrack() {
 		double ToDegree,MyDegree,TurnDegree;
+		//左半分へ移動
+		
+		
 		//中心への角度を取得
 		ToDegree = leftToCenterDegree();
 		
@@ -191,7 +219,7 @@ public class Move{
 		Dist = calculateDistance();
 		Diff = Dist - mRadius;
 		
-		//自機と中心との距離が10.0未満になるまで移動
+		//自機と中心との距離と半径との差が10.0未満になるまで移動
 		while(Math.abs(Diff)>=10.0){
 			mRobot.ahead(9.0 * Diff/Math.abs(Diff));
 			Dist = calculateDistance();
@@ -229,7 +257,7 @@ public class Move{
 		Dist = calculateDistance();
 		Diff = Dist - mRadius;
 		
-		//自機と中心との距離が10.0未満になるまで移動
+		//自機と中心との距離と半径との差が10.0未満になるまで移動
 		while(Math.abs(Diff)>=10.0){
 			mRobot.ahead(9.0 * Diff/Math.abs(Diff));
 			Dist = calculateDistance();
@@ -262,9 +290,9 @@ public class Move{
 		Dist = calculateDistance();
 		Diff = Dist - mRadius;
 		
-		//自機と中心との距離が10.0未満になるまで移動
-		while(Math.abs(Diff)>=10.0){
-			mRobot.ahead(-9.0 * Diff/Math.abs(Diff));
+		//自機と中心との距離と半径との差が5.0未満になるまで移動
+		while(Math.abs(Diff)>=5.0){
+			mRobot.ahead(-4.5 * Diff/Math.abs(Diff));
 			Dist = calculateDistance();
 			Diff = Dist - mRadius;
 		}
@@ -320,7 +348,7 @@ public class Move{
 			}
 			
 			//中心からの距離がずれ始めたら(円軌道からずれ始めたら)修正する処理
-			if(Math.abs(calculateDistance()-mRadius)>=10.0) {
+			if(Math.abs(calculateDistance()-mRadius)>=20.0) {
 				leftOnTrack();
 			}
 			
@@ -352,7 +380,7 @@ public class Move{
 			}
 
 			//中心からの距離がずれ始めたら(円軌道からずれ始めたら)修正する処理
-			if(Math.abs(calculateDistance()-mRadius)>=10.0) {
+			if(Math.abs(calculateDistance()-mRadius)>=20.0) {
 				rightOnTrack();
 			}
 
@@ -388,8 +416,8 @@ public class Move{
 	}
 	/*
 	 TODO 今後やらないといけないこと・やっていくべきこと
-	  1.軌道に乗るまでにステージ中央で衝突・渋滞してそのまま死んでいく、という場合が割とあるので、それの改善
-	  2.適切な半径、移動スピード、半円の境界の隙間の広さなどを決めていく
-	  3.発砲処理(現状は銃口をぐるぐる回すだけなので、命中率は結構低い)
+	  1.適切な半径、移動スピード、半円の境界の隙間の広さなどを決めていく
+	  2.発砲処理(現状は銃口をぐるぐる回すだけなので、命中率は結構低い)
+	  3.衝突処理
 	 */
 }
