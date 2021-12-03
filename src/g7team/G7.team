@@ -1,7 +1,0 @@
-#Robocode robot team
-#Fri Nov 26 15:54:01 JST 2021
-team.description=First G7
-robocode.version=1.9.4.3
-team.author.name=2021-PBL-B-G7
-team.version=1.0
-team.members=g7team.G7LeaderRobot*,g7team.G7SubRobot1*,g7team.G7SubRobot2*

@@ -1,8 +1,6 @@
-package move;
+package G7team;
 
 import robocode.*;
-import robocode.AdvancedRobot;
-import java.awt.Color;
 
 public class Move{
 	// ‰ñ“]ˆÚ“®‚Ì’†SÀ•W
