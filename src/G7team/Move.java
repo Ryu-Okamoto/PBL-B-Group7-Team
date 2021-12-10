@@ -115,14 +115,14 @@ public class Move{
 		Y = mRobot.getY();
 		
 		//角度計算(詳しい計算内容はSlackに投稿した写真を見てください)
-		if(X<=400.0){
-			if(Y<=400.0){
+		if(X<=mCenterX){
+			if(Y<=mCenterY){
 				return(Math.atan((mCenterX-X)/(mCenterY-Y)) * 180 / Math.PI);
 			}else{
 				return(-1.0 * Math.atan((mCenterY-Y)/(mCenterX-X)) * 180 / Math.PI + 90.0);
 			}
 		}else{
-			if(Y<=400.0){
+			if(Y<=mCenterY){
 				return(-1.0 * Math.atan((mCenterY-Y)/(mCenterX-X)) * 180 / Math.PI + 90.0);
 			}else{
 				return(Math.atan((mCenterX-X)/(mCenterY-Y)) * 180 / Math.PI);
@@ -138,14 +138,14 @@ public class Move{
 		Y = mRobot.getY();
 		
 		//角度計算(詳しい計算内容はSlackに投稿した写真を見てください)
-		if(X<=400.0){
-			if(Y<=400.0){
+		if(X<=mCenterX){
+			if(Y<=mCenterY){
 				return(Math.atan((mCenterY-Y)/(mCenterX-X)) * 180 / Math.PI + 90.0);
 			}else{
 				return(-1.0 * Math.atan((mCenterX-X)/(mCenterY-Y)) * 180 / Math.PI);
 			}
 		}else{
-			if(Y<=400.0){
+			if(Y<=mCenterY){
 				return(-1.0 * Math.atan((mCenterX-X)/(mCenterY-Y)) * 180 / Math.PI);
 			}else{
 				return(Math.atan((mCenterY-Y)/(mCenterX-X)) * 180 / Math.PI + 90.0);
@@ -161,14 +161,14 @@ public class Move{
 		Y = mRobot.getY();
 		
 		//角度計算(詳しい計算内容はSlackに投稿した写真を見てください)
-		if(X<=400.0){
-			if(Y<=400.0){
+		if(X<=mCenterX){
+			if(Y<=mCenterY){
 				return(Math.atan((mCenterX-X)/(mCenterY-Y)) * 180 / Math.PI - 180.0);
 			}else{
 				return(-1.0 * Math.atan((mCenterY-Y)/(mCenterX-X)) * 180 / Math.PI - 90.0);
 			}
 		}else{
-			if(Y<=400.0){
+			if(Y<=mCenterY){
 				return(-1.0 * Math.atan((mCenterY-Y)/(mCenterX-X)) * 180 / Math.PI + 90.0);
 			}else{
 				return(Math.atan((mCenterX-X)/(mCenterY-Y)) * 180 / Math.PI);
@@ -219,7 +219,7 @@ public class Move{
 		
 		//自機と中心との距離と半径との差が10.0未満になるまで移動
 		while(Math.abs(Diff)>=10.0){
-			mRobot.ahead(9.0 * Diff/Math.abs(Diff));
+			mRobot.ahead(Diff);
 			Dist = calculateDistance();
 			Diff = Dist - mRadius;
 		}
@@ -257,7 +257,7 @@ public class Move{
 		
 		//自機と中心との距離と半径との差が10.0未満になるまで移動
 		while(Math.abs(Diff)>=10.0){
-			mRobot.ahead(9.0 * Diff/Math.abs(Diff));
+			mRobot.ahead(Diff);
 			Dist = calculateDistance();
 			Diff = Dist - mRadius;
 		}
@@ -290,7 +290,7 @@ public class Move{
 		
 		//自機と中心との距離と半径との差が5.0未満になるまで移動
 		while(Math.abs(Diff)>=5.0){
-			mRobot.ahead(-4.5 * Diff/Math.abs(Diff));
+			mRobot.ahead(-Diff);
 			Dist = calculateDistance();
 			Diff = Dist - mRadius;
 		}

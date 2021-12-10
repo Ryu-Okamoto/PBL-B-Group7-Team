@@ -6,14 +6,20 @@ import java.awt.Color;
 public class G7LeaderRobot extends TeamRobot{
 	//private Gun  mGun;
 	private Move mMove;
+	private double radius;
 	
 	public void run() {	
-		//’…F
-		Color springgreen  = new Color(0,255,127);
-		setColors(springgreen, springgreen, springgreen, springgreen, springgreen);
+		//’…F(‰©—ÎF‚Í0,255,127)
+		Color teamcolor  = new Color(255,0,0);
+		setColors(teamcolor, teamcolor, teamcolor, teamcolor, teamcolor);
+
+		/*
+		 TODO ‰ñ“]”¼Œa(‚¢‚ë‚¢‚ë‚¢‚¶‚Á‚Ä‚İ‚Ä‚­‚¾‚³‚¢)
+		 */
+		radius = 50.0;
 		
 		//’†‰›—p
-		mMove = new Move(this, 400.0, 400.0, 50.0, 2);
+		mMove = new Move(this, 400.0, 400.0, radius, 2);
 		
 		//‹O“¹‚Éæ‚é
 		mMove.getOnTrack();

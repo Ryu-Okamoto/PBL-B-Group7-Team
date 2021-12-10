@@ -2,22 +2,42 @@ package G7team;
 
 import robocode.*;
 import java.awt.Color;
+import java.io.IOException;
 
 public class G7SubRobot2 extends TeamRobot{
 	//private Gun  mGun;
 	private int mode;
 	private Move mMove;
+	private double radius;
+	private double myX;
+	private String buddy = "G7team.G7SubRobot1";
 	
 	public void run() {	
-		//着色
-		Color springgreen  = new Color(0,255,127);
-		setColors(springgreen, springgreen, springgreen, springgreen, springgreen);
-
-		//右担当
-		mode = 1;
+		//着色(黄緑色は0,255,127)
+		Color teamcolor  = new Color(255,0,0);
+		setColors(teamcolor, teamcolor, teamcolor, teamcolor, teamcolor);
+		
+		//自機の初期位置を送信
+		myX = getX();
+		try {
+			sendMessage(buddy,new Point(myX,getY()));
+		} catch (IOException e) {
+			System.out.println("Sending Message Error");
+		}
+		
+		//もう1機の衛星役から座標が送られてくるまで待機
+		mode = -1;
+		while(mode<0) {
+			turnGunRight(360.0);
+		}
+		
+		/*
+		 TODO 回転半径(いろいろいじってみてください)
+		 */
+		radius = 300.0;
 		
 		//Move型用意
-		mMove = new Move(this, 400.0, 400.0, 300.0, mode);
+		mMove = new Move(this, 400.0, 400.0, radius, mode);
 		
 		//軌道に乗る
 		mMove.getOnTrack();
@@ -36,4 +56,16 @@ public class G7SubRobot2 extends TeamRobot{
 			fire(1);
 		}
 	}
+	
+	public void onMessageReceived(MessageEvent e) {
+		if(mode<0) {
+			Point p = (Point)e.getMessage();
+			if(myX<p.getX()) {
+				mode = 0;
+			}else {
+				mode = 1;
+			}
+		}
+	}
+	
 }
