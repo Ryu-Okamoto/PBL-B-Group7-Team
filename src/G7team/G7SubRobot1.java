@@ -11,6 +11,7 @@ public class G7SubRobot1 extends TeamRobot{
 	private double radius;
 	private double myX;
 	private String buddy = "G7team.G7SubRobot2";
+	private String primary = "G7LeaderRobot";
 	
 	public void run() {	
 		//’…F(‰©—ÎF‚Í0,255,127)
@@ -34,7 +35,7 @@ public class G7SubRobot1 extends TeamRobot{
 		/*
 		 TODO ‰ñ“]”¼Œa(‚¢‚ë‚¢‚ë‚¢‚¶‚Á‚Ä‚İ‚Ä‚­‚¾‚³‚¢)
 		 */
-		radius = 300.0;
+		radius = 150.0;
 		
 		//MoveŒ^—pˆÓ
 		mMove = new Move(this, 400.0, 400.0, radius, mode);

@@ -7,6 +7,8 @@ public class G7LeaderRobot extends TeamRobot{
 	//private Gun  mGun;
 	private Move mMove;
 	private double radius;
+	private String satelite1 = "G7team.G7SubRobot1";
+	private String satelite2 = "G7team.G7SubRobot2";
 	
 	public void run() {	
 		//’…F(‰©—ÎF‚Í0,255,127)
