@@ -26,10 +26,6 @@ public class G7LeaderRobot extends TeamRobot{
 		//‹O“¹‚Éæ‚é
 		mMove.getOnTrack();
 		
-		//eŒû‚ğ‰ñ“]‚³‚¹‘±‚¯‚é
-		while(true) {
-			turnGunRight(360.0);
-		}
 	}
 	
 	public void onScannedRobot(ScannedRobotEvent e) {

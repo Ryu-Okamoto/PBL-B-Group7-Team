@@ -351,7 +351,7 @@ public class Move{
 			}
 			
 			//「銃口を1回転させる処理」を予約(この時点ではまだ回転しない)
-			mRobot.setTurnGunRight(360.0);
+			//mRobot.setTurnGunRight(360.0);
 			
 			//予約していた処理(車体回転、移動、銃口回転)を同時に実行
 			mRobot.execute();
@@ -383,7 +383,7 @@ public class Move{
 			}
 
 			//「銃口を1回転させる処理」を予約(この時点ではまだ回転しない)
-			mRobot.setTurnGunRight(360.0);
+			//mRobot.setTurnGunRight(360.0);
 
 			//予約していた処理(車体回転、移動、銃口回転)を同時に実行
 			mRobot.execute();
@@ -406,7 +406,7 @@ public class Move{
 			}
 
 			//「銃口を1回転させる処理」を予約(この時点ではまだ回転しない)
-			mRobot.setTurnGunRight(360.0);
+			//mRobot.setTurnGunRight(360.0);
 			
 			//予約していた処理(車体回転、移動、銃口回転)を同時に実行
 			mRobot.execute();

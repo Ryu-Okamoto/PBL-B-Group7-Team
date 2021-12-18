@@ -20,14 +20,13 @@ public class G7SubRobot2 extends TeamRobot{
 		
 		//自機の初期位置を送信
 		myX = getX();
+		mode = -1;
 		try {
 			sendMessage(buddy,new Point(myX,getY()));
 		} catch (IOException e) {
 			System.out.println("Sending Message Error");
 		}
 		
-		//もう1機の衛星役から座標が送られてくるまで待機
-		mode = -1;
 		while(mode<0) {
 			turnGunRight(360.0);
 		}
@@ -42,11 +41,6 @@ public class G7SubRobot2 extends TeamRobot{
 		
 		//軌道に乗る
 		mMove.getOnTrack();
-
-		//銃口を回転させ続ける
-		while(true) {
-			turnGunRight(360.0);
-		}
 	}
 	
 	public void onScannedRobot(ScannedRobotEvent e) {
