@@ -1,5 +1,8 @@
 package G7team;
 
+import java.awt.Color;
+import java.io.IOException;
+
 import robocode.*;
 
 public class Move{
@@ -7,27 +10,50 @@ public class Move{
 	private double mCenterX;
 	private double mCenterY;
 	
+	//もう1台の衛星機の名前
+	String mBuddyName;
+	
+	//もう1台の衛星機の初期座標
+	private double mBuddyX;
+	private double mBuddyY;
+	
 	// 回転移動の半径
 	private double mRadius;
 	
 	// 制御先のロボット
 	private TeamRobot mRobot;
 	
-	//移動モード(0:左半分、1:右半分、2:中央)
+	//移動モード(0:中央、11:左半分メイン、12:左半分アシスト、21:右半分メイン、22:右半分アシスト)
 	private int mmode;
 	
 	//回転方向(1:時計回り、-1:反時計回り)
 	private double clkwise;
 	
-	public Move(TeamRobot robot, double XCenter, double YCenter, double radius, int mode){
+	private String ADJUST_MSG = "Adjust!";
+	
+	/*引数
+		robot:自機情報
+		XCenter:ステージ中央のX座標
+		YCenter:ステージ中央のY座標
+		XBuddy:もう1台の衛星機の初期位置X座標(アシスト機のみ必要)
+		YBuddy:もう1台の衛星機の初期位置Y座標(アシスト機のみ必要)
+		radius:円軌道の半径
+		mode:移動モード
+	*/
+	public Move(TeamRobot robot, double XCenter, double YCenter, String BuddyName, double XBuddy, double YBuddy, double radius, int mode){
 		mRobot  = robot;
 		mCenterX = XCenter;
 		mCenterY = YCenter;
+		mBuddyName = BuddyName;
+		mBuddyX = XBuddy;
+		mBuddyY = YBuddy;
 		mRadius = radius;
 		mmode = mode;
+		clkwise = 1;
 	}
 	
 	public void getOnTrack() {
+		/*
 		//初期位置
 		firstMove();
 		
@@ -39,29 +65,49 @@ public class Move{
 			//ステージ左上or右下にスポーンしたら反時計回り
 			clkwise = -1;
 		}
-		//色は黄緑系で
-		switch(mmode) {
-			case 0:
-				//左半分の軌道に乗る
-				leftOnTrack();
-				//半円軌道を描く
-				leftRound();
-				break;
-			case 1:
-				//右半分の軌道に乗る
-				rightOnTrack();
-				//半円軌道を描く
-				rightRound();
-				break;
-			case 2:
+		
+		switch(mmode/10) {
+			case 0://主星機の動き
 				//中央の軌道に乗る
 				centerOnTrack();
-				//円軌道を描く
-				centerRound();
 				break;
+			case 1://左側衛星機の動き
+				switch(mmode%10) {
+					case 1://メイン機の動き
+						centerOnTrack();
+						break;
+					case 2://アシスト機の動き
+						assistFirstMove();
+						assistOnLine();
+						break;
+				}
+				break;
+			case 2://右側衛星機の動き
+				switch(mmode%10) {
+					case 1://メイン機の動き
+						centerOnTrack();
+						break;
+					case 2://アシスト機の動き
+						assistFirstMove();
+						assistOnLine();
+						break;
+				}
+			break;
 		}
+		*/
+		
+		//自機がアシスト機ならアシスト機用の移動をする
+		if(mmode%10==2) {
+			assistFirstMove();
+			assistOnLine();
+		}
+		
+		//軌道に乗る
+		centerOnTrack();
 	}
 	
+	//アシスト機の初期位置の移動処理はassistFirstMoveメソッドに移しました
+	/*
 	//初期位置の移動の処理
 	public void firstMove() {
 		switch(mmode) {
@@ -87,26 +133,28 @@ public class Move{
 				break;
 			}
 	}
+	*/
 	
-	/*
+	//着色処理(デバッグ用にどうぞ)
 	public void paintColor() {
-		switch(mmode) {
+		switch(mmode%10) {
 			case 0:
-				//色を青色に変更
-				mRobot.setColors(Color.blue, Color.blue, Color.blue, Color.blue, Color.blue);
+				//主星機の色を緑色に変更
+				mRobot.setColors(Color.green, Color.green, Color.green, Color.green, Color.green);
 				break;
 			case 1:
-				//色を赤色に変更
-				mRobot.setColors(Color.red, Color.red, Color.red, Color.red, Color.red);
+				//メイン機の色を青色に変更
+				mRobot.setColors(Color.blue, Color.blue, Color.blue, Color.blue, Color.blue);
 				break;
 			case 2:
-				//色を緑色に変更
-				mRobot.setColors(Color.green, Color.green, Color.green, Color.green, Color.green);
+				//アシスト機の色を赤色に変更
+				mRobot.setColors(Color.red, Color.red, Color.red, Color.red, Color.red);
 				break;
 		}
 	}
-	*/
 	
+	//角度計算は中央用のみで事足りるようになりました
+	/*
 	//中心の方向の角度を計算(左半分用)
 	public double leftToCenterDegree() {
 		//計算に必要な自機の座標を取得
@@ -152,6 +200,7 @@ public class Move{
 			}
 		}
 	}
+	*/
 	
 	//中心の方向の角度を計算(中央用)
 	public double centerToCenterDegree() {
@@ -176,19 +225,21 @@ public class Move{
 		}
 	}
 	
-	//角度を-180度～180度に変換して返す関数
+	//角度を-180度～180度に変換して返す関数(-180度以上、180度以下を返す)
 	public double convertDegree(double Degree) {
 		double D;
 		D = Degree;
 		while(D>180.0) {
 			D -= 360.0;
 		}
-		while(D<=-180.0) {
+		while(D<-180.0) {
 			D += 360.0;
 		}
 		return(D);
 	}
 	
+	//機体が軌道に乗るまでの動きも中央用だけで済むようになりました
+	/*
 	//左半分機体が軌道に乗るまでの動き
 	public void leftOnTrack() {
 		double ToDegree,MyDegree,TurnDegree;
@@ -266,6 +317,7 @@ public class Move{
 		mRobot.turnLeft(90.0);
 		
 	}
+	*/
 	
 	//中央機体が軌道に乗るまでの動き
 	public void centerOnTrack() {
@@ -295,8 +347,6 @@ public class Move{
 			Diff = Dist - mRadius;
 		}
 		
-		//中心に対して垂直方向を向く
-		mRobot.turnRight(90.0);
 	}
 
 	// 現在値と円の中心の距離を計算
@@ -306,6 +356,8 @@ public class Move{
 		return Math.sqrt(delta_x*delta_x + delta_y*delta_y);
 	}
 	
+	//角度計算も中央用のみで十分になりました
+	/*
 	//接線方向を向くために回転させないといけない角度を計算(左半分用)
 	private double calcLeftVerDegree() {
 		//計算内容はまた後日、図か何かで紹介しようと思います
@@ -317,6 +369,7 @@ public class Move{
 		//計算内容はまた後日、図か何かで紹介しようと思います
 		return(convertDegree(-rightToCenterDegree() + 270.0 - mRobot.getHeading()));
 	}
+	*/
 	
 	//接線方向を向くために回転させないといけない角度を計算(中央用)
 	private double calcCenterVerDegree() {
@@ -324,6 +377,8 @@ public class Move{
 		return(convertDegree(centerToCenterDegree() + 90.0 - mRobot.getHeading()));
 	}
 	
+	//軌道上の動きも中心用だけで十分です
+	/*
 	double sukima = 40.0; //左右の半円の境界部分の間隔(あとで変えられるように変数を使っています)
 	
 	//半円軌道を描く処理(左半分用)
@@ -389,9 +444,13 @@ public class Move{
 			mRobot.execute();
 		 }
 	}
+	*/
 	
 	//円軌道を描く処理(中央用)
-	private void centerRound() {
+	public void centerRound() {
+		//中心に対して垂直方向を向く
+		mRobot.turnRight(90.0);
+		
 		//以下の処理を一生ループ
 		while (true) {
 			//「車体が接線方向を向くように回転する処理」を予約(この時点ではまだ回転しない)
@@ -401,8 +460,10 @@ public class Move{
 			mRobot.setAhead(5.0 * clkwise);
 
 			//中心からの距離がずれ始めたら(円軌道からずれ始めたら)修正する処理
-			if(Math.abs(calculateDistance()-mRadius)>=10.0) {
+			if(Math.abs(calculateDistance()-mRadius)>=30.0) {
+				sendAdjustMsg();
 				centerOnTrack();
+				mRobot.turnRight(90.0);
 			}
 
 			//「銃口を1回転させる処理」を予約(この時点ではまだ回転しない)
@@ -412,9 +473,104 @@ public class Move{
 			mRobot.execute();
 		 }
 	}
+	
+	//アシスト機が左右に分かれるメソッド
+	private void assistFirstMove() {
+		double myX,goalX;
+		myX = mRobot.getX();
+		goalX = myX;
+		switch(mmode/10){
+			case 1://左半分側アシスト機について
+				if(myX>=mCenterX) {
+					goalX = 2.0*mCenterX - myX;
+				}
+				break;
+			case 2://右半分側アシスト機について
+				if(myX<=mCenterX) {
+					goalX = 2.0*mCenterX - myX;
+				}
+				break;
+		}
+		
+		//アシスト機が移動すべき位置に移動
+		while(Math.abs(goalX-myX)>1.0) {
+			faceLateral(goalX-myX);
+			mRobot.ahead(Math.abs(goalX-myX));
+			myX = mRobot.getX();
+		}
+	}
+	
+	//アシスト機がライン上に乗るようにするメソッド
+	private void assistOnLine() {
+		double myX,myY,goalY;
+		//自機の現座標
+		myX = mRobot.getX();
+		myY = mRobot.getY();
+		
+		//目標となるY座標の算出
+		if(mmode/10==1) {
+			goalY = mCenterY - ((mCenterX - myX)*(mBuddyY - mCenterY)/(mBuddyX - mCenterX));
+		}else {
+			goalY = mCenterY + ((myX - mCenterX)*(mCenterY - mBuddyY)/(mCenterX - mBuddyX));
+		}
+		
+		//ライン上に乗るように移動
+		while(Math.abs(goalY-myY)>1.0) {
+			facePortrait(goalY-myY);
+			mRobot.ahead(Math.abs(goalY-myY));
+			myY = mRobot.getY();
+		}
+	}
+	
+	//縦方向(Y軸方向)へ車体を向けるメソッド。modeが正なら上向き(Y軸+方向)、負なら下向き(Y軸-方向)
+	private void facePortrait(double mode) {
+		//どの角度を向くべきか[上向き:0度、下向き:180度]
+		double targetDegree;
+		if(mode>0.0) {
+			targetDegree = 0.0;
+		}else {
+			targetDegree = 180.0;
+		}
+		
+		//その角度を向くように車体回転
+		while(Math.abs(convertDegree(mRobot.getHeading()-targetDegree))>=0.1) {
+			mRobot.turnRight(convertDegree(targetDegree-mRobot.getHeading()));
+		}
+	}
+	
+	//横方向(X軸方向)へ車体を向けるメソッド。modeが正なら右向き(X軸+方向)、負なら左向き(X軸-方向)
+	private void faceLateral(double mode) {
+		//どの角度を向くべきか[右向き:90度、左向き:270度]
+		double targetDegree;
+		if(mode>0.0) {
+			targetDegree = 90.0;
+		}else {
+			targetDegree = 270.0;
+		}
+		
+		//その角度を向くように車体回転
+		while(Math.abs(convertDegree(mRobot.getHeading()-targetDegree))>=0.1) {
+			mRobot.turnRight(convertDegree(targetDegree-mRobot.getHeading()));
+		}
+	}
+
+	//回転方向を変えるメソッド
+	public void turnClock() {
+		clkwise *= -1.0;
+	}
+	
+	//起動補正したことを相方に伝えるメソッド
+	public void sendAdjustMsg() {
+		if(mmode>0) {
+			try {
+				mRobot.sendMessage(mBuddyName,ADJUST_MSG);
+			} catch (IOException e) {
+				System.out.println("Sending Message Error");
+			}
+		}
+	}
+	
 	/*
 	 TODO 今後やらないといけないこと・やっていくべきこと
-	  1.衝突処理
-	  2.Moveクラスから銃に関する処理(銃口回転など)を全て除く
 	 */
 }
