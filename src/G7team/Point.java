@@ -27,4 +27,13 @@ public class Point implements Serializable{
 	public void setY(double y) {
 		this.Y = y;
 	}
+	
+	public Point add(Point point) {
+		return new Point(this.X + point.getX(), this.Y + point.getY());
+	}
+	
+	public double distance(Point point) {
+		return Math.sqrt((this.X - point.getX())*(this.X - point.getX())
+				+ (this.Y - point.getY())*(this.Y - point.getY()));
+	}
 }

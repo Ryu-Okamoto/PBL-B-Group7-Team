@@ -4,7 +4,7 @@ import robocode.*;
 import java.awt.Color;
 
 public class G7LeaderRobot extends TeamRobot{
-	//private Gun  mGun;
+	private Gun  mGun;
 	private Move mMove;
 	private double radius;
 	private double CENTER_X = 400.0;
@@ -22,6 +22,8 @@ public class G7LeaderRobot extends TeamRobot{
 		 */
 		radius = 50.0;
 		
+		mGun = new Gun(this, 3.0);
+		
 		//’†‰›—p
 		mMove = new Move(this, CENTER_X, CENTER_Y, "NONE", 0.0, 0.0, radius, 0);
 		
@@ -37,7 +39,7 @@ public class G7LeaderRobot extends TeamRobot{
 		if (isTeammate(e.getName())) {
 			return;
 		}else {
-			fire(1);
+			mGun.onScannedRobot(e);
 		}
 	}
 }
