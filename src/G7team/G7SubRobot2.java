@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.io.IOException;
 
 public class G7SubRobot2 extends TeamRobot{
-	//private Gun  mGun;
+	private Gun  mGun;
 	private int mode;
 	private Move mMove;
 	private double radius;
@@ -25,6 +25,8 @@ public class G7SubRobot2 extends TeamRobot{
 	private int stoneFlag;
 	
 	public void run() {	
+		mGun = new Gun(this, 2.0);
+		
 		//íÖêF(â©óŒêFÇÕ0,255,127)
 		Color teamcolor  = new Color(255,0,0);
 		setColors(teamcolor, teamcolor, teamcolor, teamcolor, teamcolor);
@@ -80,7 +82,7 @@ public class G7SubRobot2 extends TeamRobot{
 			//ë®Ç¶ÇΩÇÃÇ™ñ°ï˚Ç»ÇÁâΩÇ‡ÇµÇ»Ç¢
 			return;
 		}else {
-			fire(1);
+			mGun.onScannedRobot(e);
 		}
 	}
 	

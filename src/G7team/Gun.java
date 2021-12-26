@@ -45,20 +45,25 @@ public class Gun {
 		enemyX = enemyPosition.getX();
 		enemyY = enemyPosition.getY();
 		
+		double toDeglee;
+		
 		// 角度計算(詳しい計算内容はSlackに投稿した写真を見てください)
 		if(X <= enemyX){
 			if(Y <= enemyY){
-				return(Math.atan((enemyX - X)/(enemyY - Y)) * 180 / Math.PI - 180.0);
+				toDeglee = Math.atan((enemyX - X)/(enemyY - Y)) * 180 / Math.PI;
 			}else{
-				return(-1.0 * Math.atan((enemyY - Y)/(enemyX - X)) * 180 / Math.PI - 90.0);
+				toDeglee = Math.atan((Y - enemyY)/(enemyX - X)) * 180 / Math.PI + 90.0;
 			}
 		}else{
 			if(Y <= enemyY){
-				return(-1.0 * Math.atan((enemyY - Y)/(enemyX - X)) * 180 / Math.PI + 90.0);
+				toDeglee = -1.0 * Math.atan((X - enemyX)/(enemyY - Y)) * 180 / Math.PI;
 			}else{
-				return(Math.atan((enemyX - X)/(enemyY - Y)) * 180 / Math.PI);
+				toDeglee = -1.0 * Math.atan((Y - enemyY)/(X - enemyX)) * 180 / Math.PI - 90.0;
 			}
 		}
+		
+		return(toDeglee - mRobot.getGunHeading());
+		
 	}
 	
 	//角度を-180度～180度に変換して返す関数(-180度以上、180度以下を返す)

@@ -350,7 +350,7 @@ public class Move{
 	}
 
 	// 現在値と円の中心の距離を計算
-	private double calculateDistance() {
+	public double calculateDistance() {
 		double delta_x = mRobot.getX() - mCenterX;
 		double delta_y = mRobot.getY() - mCenterY;
 		return Math.sqrt(delta_x*delta_x + delta_y*delta_y);
@@ -372,7 +372,7 @@ public class Move{
 	*/
 	
 	//接線方向を向くために回転させないといけない角度を計算(中央用)
-	private double calcCenterVerDegree() {
+	public double calcCenterVerDegree() {
 		//計算内容はまた後日、図か何かで紹介しようと思います
 		return(convertDegree(centerToCenterDegree() + 90.0 - mRobot.getHeading()));
 	}

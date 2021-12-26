@@ -13,6 +13,8 @@ public class G7LeaderRobot extends TeamRobot{
 	//private String satelite2 = "G7team.G7SubRobot2";
 	
 	public void run() {	
+		mGun = new Gun(this, 2.0);
+		
 		//’…F(‰©—ÎF‚Í0,255,127)
 		Color teamcolor  = new Color(255,0,0);
 		setColors(teamcolor, teamcolor, teamcolor, teamcolor, teamcolor);
@@ -21,8 +23,6 @@ public class G7LeaderRobot extends TeamRobot{
 		 TODO ‰ñ“]”¼Œa(‚¢‚ë‚¢‚ë‚¢‚¶‚Á‚Ä‚İ‚Ä‚­‚¾‚³‚¢)
 		 */
 		radius = 50.0;
-		
-		mGun = new Gun(this, 3.0);
 		
 		//’†‰›—p
 		mMove = new Move(this, CENTER_X, CENTER_Y, "NONE", 0.0, 0.0, radius, 0);
