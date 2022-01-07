@@ -11,6 +11,7 @@ public class G7LeaderRobot extends TeamRobot{
 	private double CENTER_Y = 400.0;
 	//private String satelite1 = "G7team.G7SubRobot1";
 	//private String satelite2 = "G7team.G7SubRobot2";
+	private boolean mUnderFix = false;
 	
 	public void run() {	
 		mGun = new Gun(this, 2.0);
@@ -35,11 +36,62 @@ public class G7LeaderRobot extends TeamRobot{
 		mMove.centerRound();
 	}
 	
+	/*
 	public void onScannedRobot(ScannedRobotEvent e) {
 		if (isTeammate(e.getName())) {
 			return;
 		}else {
 			mGun.onScannedRobot(e);
 		}
+	}
+	*/
+	
+	// 中心機体は不要?
+	public void onScannedRobot(ScannedRobotEvent e) {	
+		if (isTeammate(e.getName())) {
+			return;
+		}else if(isNecessaryToAmend()){
+			if(!mUnderFix) {
+				mUnderFix = true;
+				setTurnGunRight(convertDegree(getHeading() - 90.0 - getGunHeading()));
+			}
+		}else if(!mUnderFix){
+			mGun.onScannedRobot(e);
+		}
+		
+		if(isFixedEnough(5.0)){
+			mUnderFix = false;
+		}
+	}
+	
+	// 砲台の角度を修正する必要があるかを判定
+	private boolean isNecessaryToAmend() {
+		return (
+				(CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
+				 + (CENTER_Y - getY()) * Math.cos(getGunHeadingRadians()) > 0
+		);
+	}
+	// 十分に修正できたかを判定(引数には誤差)
+	private boolean isFixedEnough(double degree) {
+		return (
+				((CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
+				 + (CENTER_Y - getY()) * Math.cos(getGunHeadingRadians()))
+				/ Math.sqrt(
+						(CENTER_X - getX())*(CENTER_X - getX()) 
+						+ (CENTER_Y - getY())*(CENTER_Y - getY()))
+				< (-1.0) * Math.cos(Math.toDegrees(degree))
+		);
+	}
+	
+	private double convertDegree(double Degree) {
+		double D;
+		D = Degree;
+		while(D>180.0) {
+			D -= 360.0;
+		}
+		while(D<-180.0) {
+			D += 360.0;
+		}
+		return(D);
 	}
 }

@@ -23,6 +23,7 @@ public class G7SubRobot1 extends TeamRobot{
 	private String ADJUST_MSG = "Adjust!";
 	private int buddyReadyFlag;
 	private int stoneFlag;
+	private boolean mUnderFix = false;
 	
 	public void run() {	
 		mGun = new Gun(this, 2.0);
@@ -83,13 +84,52 @@ public class G7SubRobot1 extends TeamRobot{
 		mMove.centerRound();
 	}
 	
-	public void onScannedRobot(ScannedRobotEvent e) {
+	public void onScannedRobot(ScannedRobotEvent e) {	
 		if (isTeammate(e.getName())) {
-			//‘¨‚¦‚½‚Ì‚ª–¡•û‚È‚ç‰½‚à‚µ‚È‚¢
 			return;
-		}else {
+		}else if(isNecessaryToAmend()){
+			if(!mUnderFix) {
+				mUnderFix = true;
+				setTurnGunRight(convertDegree(getHeading() - 90.0 - getGunHeading()));
+			}
+		}else if(!mUnderFix){
 			mGun.onScannedRobot(e);
 		}
+		
+		if(isFixedEnough(5.0)){
+			mUnderFix = false;
+		}
+	}
+	
+	// –C‘ä‚ÌŠp“x‚ğC³‚·‚é•K—v‚ª‚ ‚é‚©‚ğ”»’è
+	private boolean isNecessaryToAmend() {
+		return (
+				(CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
+				 + (CENTER_Y - getY()) * Math.cos(getGunHeadingRadians()) > 0
+		);
+	}
+	// \•ª‚ÉC³‚Å‚«‚½‚©‚ğ”»’è(ˆø”‚É‚ÍŒë·)
+	private boolean isFixedEnough(double degree) {
+		return (
+				((CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
+				 + (CENTER_Y - getY()) * Math.cos(getGunHeadingRadians()))
+				/ Math.sqrt(
+						(CENTER_X - getX())*(CENTER_X - getX()) 
+						+ (CENTER_Y - getY())*(CENTER_Y - getY()))
+				< (-1.0) * Math.cos(Math.toDegrees(degree))
+		);
+	}
+	
+	private double convertDegree(double Degree) {
+		double D;
+		D = Degree;
+		while(D>180.0) {
+			D -= 360.0;
+		}
+		while(D<-180.0) {
+			D += 360.0;
+		}
+		return(D);
 	}
 	
 	public void onMessageReceived(MessageEvent e) {
