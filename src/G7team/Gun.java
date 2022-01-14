@@ -11,7 +11,6 @@ public class Gun {
 	}
 	
 	public void onScannedRobot(ScannedRobotEvent e) {
-		// 計算に必要な座標や速度を計算
 		double absoluteBearing = mRobot.getHeadingRadians() + e.getBearingRadians();
 		Point ourPosition      = new Point(mRobot.getX(), mRobot.getY());
 		Point enemyPosition    = new Point(
@@ -23,7 +22,6 @@ public class Gun {
 		double bulletVelocity = 20.0 - 3 * mBulletEnergy;
 		double bulletRadius   = 0.0;
 		
-		// 敵機と放った弾丸の距離が18.0以下になるまでシミュレーション
 		while(Math.abs(ourPosition.distance(enemyPosition) - bulletRadius) > 18.0) {
 			enemyPosition = enemyPosition.add(enemyVelocity);
 			bulletRadius  = bulletRadius + bulletVelocity;
@@ -35,19 +33,16 @@ public class Gun {
 	}
 	
 	private double calculateDegree(Point enemyPosition) {
-		// 計算に必要な自機の座標を取得
 		double X,Y;
 		X = mRobot.getX();
 		Y = mRobot.getY();
 		
-		// 計算に必要な敵機の座標を取得
 		double enemyX, enemyY;
 		enemyX = enemyPosition.getX();
 		enemyY = enemyPosition.getY();
 		
 		double toDeglee;
 		
-		// 角度計算(詳しい計算内容はSlackに投稿した写真を見てください)
 		if(X <= enemyX){
 			if(Y <= enemyY){
 				toDeglee = Math.atan((enemyX - X)/(enemyY - Y)) * 180 / Math.PI;
@@ -66,17 +61,15 @@ public class Gun {
 		
 	}
 	
-	//角度を-180度～180度に変換して返す関数(-180度以上、180度以下を返す)
 	private double convertDegree(double Degree) {
-			double D;
-			D = Degree;
-			while(D>180.0) {
-				D -= 360.0;
-			}
-			while(D<-180.0) {
-				D += 360.0;
-			}
-			return(D);
+		double D;
+		D = Degree;
+		while(D>180.0) {
+			D -= 360.0;
 		}
-	
+		while(D<-180.0) {
+			D += 360.0;
+		}
+		return(D);
+	}
 }

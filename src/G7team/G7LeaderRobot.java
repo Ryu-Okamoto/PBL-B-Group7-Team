@@ -9,44 +9,24 @@ public class G7LeaderRobot extends TeamRobot{
 	private double radius;
 	private double CENTER_X = 400.0;
 	private double CENTER_Y = 400.0;
-	//private String satelite1 = "G7team.G7SubRobot1";
-	//private String satelite2 = "G7team.G7SubRobot2";
 	private boolean mUnderFix = false;
 	
 	public void run() {	
 		mGun = new Gun(this, 2.0);
 		
-		//’…F(‰©—ÎF‚Í0,255,127)
-		Color teamcolor  = new Color(255,0,0);
+		Color teamcolor  = new Color(0,255,127);
 		setColors(teamcolor, teamcolor, teamcolor, teamcolor, teamcolor);
 
-		/*
-		 TODO ‰ñ“]”¼Œa(‚¢‚ë‚¢‚ë‚¢‚¶‚Á‚Ä‚İ‚Ä‚­‚¾‚³‚¢)
-		 */
 		radius = 50.0;
 		
-		//’†‰›—p
 		mMove = new Move(this, CENTER_X, CENTER_Y, "NONE", 0.0, 0.0, radius, 0);
 		
-		//‹O“¹‚Éæ‚é
 		mMove.getOnTrack();
 		
-		//‹O“¹‚ğü‰ñ
 		turnGunLeft(90.0);
 		mMove.centerRound();
 	}
 	
-	/*
-	public void onScannedRobot(ScannedRobotEvent e) {
-		if (isTeammate(e.getName())) {
-			return;
-		}else {
-			mGun.onScannedRobot(e);
-		}
-	}
-	*/
-	
-	// ’†S‹@‘Ì‚Í•s—v?
 	public void onScannedRobot(ScannedRobotEvent e) {	
 		if (isTeammate(e.getName())) {
 			return;
@@ -64,14 +44,13 @@ public class G7LeaderRobot extends TeamRobot{
 		}
 	}
 	
-	// –C‘ä‚ÌŠp“x‚ğC³‚·‚é•K—v‚ª‚ ‚é‚©‚ğ”»’è
 	private boolean isNecessaryToAmend() {
 		return (
 				(CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
 				 + (CENTER_Y - getY()) * Math.cos(getGunHeadingRadians()) > 0
 		);
 	}
-	// \•ª‚ÉC³‚Å‚«‚½‚©‚ğ”»’è(ˆø”‚É‚ÍŒë·)
+	
 	private boolean isFixedEnough(double degree) {
 		return (
 				((CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
@@ -93,5 +72,10 @@ public class G7LeaderRobot extends TeamRobot{
 			D += 360.0;
 		}
 		return(D);
+	}
+	
+	public void onHitRobot(HitRobotEvent e) {
+		ahead(-10.0);
+		mMove.turnClock();
 	}
 }

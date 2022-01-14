@@ -16,7 +16,6 @@ public class G7SubRobot2 extends TeamRobot{
 	private double CENTER_X = 400.0;
 	private double CENTER_Y = 400.0;
 	private String buddy = "G7team.G7SubRobot1";
-	//private String primary = "G7LeaderRobot";
 	private String HIT_MSG = "Hit Wall!";
 	private String READY_MSG = "Ready!";
 	private String DEATH_MSG = "I Dead!";
@@ -28,11 +27,9 @@ public class G7SubRobot2 extends TeamRobot{
 	public void run() {	
 		mGun = new Gun(this, 2.0);
 		
-		//’…F(‰©—ÎF‚Í0,255,127)
-		Color teamcolor  = new Color(255,0,0);
+		Color teamcolor  = new Color(0,255,127);
 		setColors(teamcolor, teamcolor, teamcolor, teamcolor, teamcolor);
 		
-		//©‹@‚Ì‰ŠúˆÊ’u‚ğ‘—M
 		myX = getX();
 		myY = getY();
 		mode = -1;
@@ -50,15 +47,10 @@ public class G7SubRobot2 extends TeamRobot{
 		}
 		stoneFlag = 0;
 		
-		/*
-		 TODO ‰ñ“]”¼Œa(‚¢‚ë‚¢‚ë‚¢‚¶‚Á‚Ä‚İ‚Ä‚­‚¾‚³‚¢)
-		 */
 		radius = 150.0;
 		
-		//MoveŒ^—pˆÓ
 		mMove = new Move(this, CENTER_X, CENTER_Y, buddy, buddyX, buddyY, radius, mode);
 		
-		//‹O“¹‚Éæ‚é
 		mMove.getOnTrack();
 		
 		try {
@@ -95,14 +87,13 @@ public class G7SubRobot2 extends TeamRobot{
 		}
 	}
 	
-	// –C‘ä‚ÌŠp“x‚ğC³‚·‚é•K—v‚ª‚ ‚é‚©‚ğ”»’è
 	private boolean isNecessaryToAmend() {
 		return (
 				(CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
 				 + (CENTER_Y - getY()) * Math.cos(getGunHeadingRadians()) > 0
 		);
 	}
-	// \•ª‚ÉC³‚Å‚«‚½‚©‚ğ”»’è(ˆø”‚É‚ÍŒë·)
+	
 	private boolean isFixedEnough(double degree) {
 		return (
 				((CENTER_X - getX()) * Math.sin(getGunHeadingRadians())
